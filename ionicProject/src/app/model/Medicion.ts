@@ -1,14 +1,14 @@
-export class Medicion{
+export class Medicion {
     private _medicionId: number;
-    private _fecha: Date; 
+    private _fecha: Date;
     private _valor: number;
     private _dispositivoId: number;
 
-    constructor(medicion,fecha,valor,dispositivoId){
-        this._medicionId=medicion;
-        this.fecha=fecha;
-        this._valor=valor;
-        this._dispositivoId=dispositivoId;
+    constructor(medicion, fecha, valor, dispositivoId) {
+        this._medicionId = medicion;
+        this.fecha = fecha;
+        this._valor = valor;
+        this._dispositivoId = dispositivoId;
     }
 
     public get medicionId(): number {
@@ -31,7 +31,7 @@ export class Medicion{
     public set valor(value: number) {
         this._valor = value;
     }
-    
+
     public get dispositivoId(): number {
         return this._dispositivoId;
     }

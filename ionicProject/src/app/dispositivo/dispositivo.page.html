@@ -1,14 +1,23 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-button routerLink="/">
-                <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-        <ion-title>Dispositivo - {{this.idDispositivo}}</ion-title>
-    </ion-toolbar>
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-button routerLink="/" routerDirection="back">
+				<ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+			</ion-button>
+		</ion-buttons>
+		<ion-title>Dispositivo - {{this.id_dispositivo}}</ion-title>
+	</ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <div *ngIf="this.medicion !=null">Medida del sensor: {{this.medicion.valor}}</div>
+	<div id="highcharts" style="width: 100%; height: 300px;"></div>
+	<ion-item>
+		<ion-button expand="block" fill="outline"> Electroválvula</ion-button>
+	</ion-item>
+	<ion-item routerLink="/log-sensor/{{this.id_dispositivo}}" routerDirection="root">
+		<ion-button expand="block" fill="outline">Ver Log Sensor</ion-button>
+	</ion-item>
+	<ion-item routerLink="/log-ev/{{this.id_dispositivo}}" routerDirection="root">
+		<ion-button expand="block" fill="outline">Ver Log Electroválvula</ion-button>
+	</ion-item>
 </ion-content>

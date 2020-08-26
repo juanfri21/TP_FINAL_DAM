@@ -9,6 +9,8 @@ routerMedicion.get('/:idDispositivo', function(req, res) {
             res.send(err).status(400);
             return;
         }
+        console.log('get medicion id');
+
         res.send(result[0]);
     });
 });
@@ -20,6 +22,8 @@ routerMedicion.get('/:idDispositivo/todas', function(req, res) {
             res.send(err).status(400);
             return;
         }
+        console.log('get todas las mediciones');
+
         res.send(result);
     });
 });
@@ -31,6 +35,8 @@ routerMedicion.post('/agregar', function(req, res) {
             res.send(err).status(400);
             return;
         }
+        console.log('insertar medicion');
+
         res.send(result);
     });
 });
