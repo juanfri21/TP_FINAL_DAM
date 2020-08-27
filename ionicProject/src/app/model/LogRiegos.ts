@@ -1,7 +1,7 @@
 export class LogRiegos {
     private _logRiegoId: number;
     private _apertura: number;
-    private _fecha: Date;
+    private _fecha: string;
     private _electrovalvulaId: number;
 
     constructor(logRiegoId, apertura, fecha, electrovalvulaId) {
@@ -23,10 +23,10 @@ export class LogRiegos {
     public set apertura(value: number) {
         this._apertura = value;
     }
-    public get fecha(): Date {
+    public get fecha(): string {
         return this._fecha;
     }
-    public set fecha(value: Date) {
+    public set fecha(value: string) {
         this._fecha = value;
     }
     public get electrovalvulaId(): number {

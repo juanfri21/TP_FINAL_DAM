@@ -11,6 +11,8 @@ import { DispositivoService } from '../services/dispositivo.service';
 //TODO: agregar componente log de riegos
 
 import * as Highcharts from 'highcharts';
+import * as moment from 'moment';
+
 declare var require: any;
 require('highcharts/highcharts-more')(Highcharts);
 require('highcharts/modules/solid-gauge')(Highcharts);
@@ -30,51 +32,34 @@ export class DispositivoPage implements OnInit {
     public accion_electrovalvula: string;
     public ABRIR_ELECTROVALVULA: string = 'Abrir';
     public CERRAR_ELECTROVALVULA: string = 'Cerrar';
+    public ELECTROVALVULA_ABIERTA: number = 1;
+    public ELECTROVALVULA_CERRADA: number = 0;
     // public valor_medicion: number = 100;
     public myChart;
     private chartOptions;
 
-    constructor(private router: ActivatedRoute, private dServ: DispositivoService, private mServ: MedicionService) { }
+    constructor(private router: ActivatedRoute, private dispositivoService: DispositivoService, private medicionService: MedicionService) { }
 
     ngOnInit() {
-        console.log('ngOnInit dispositivo page');
 
-        // this.mServ.getMedicionesByid_dispositivo(this.id_dispositivo).then((med) => {
+        // this.medicionService.getMedicionesByid_dispositivo(this.id_dispositivo).then((med) => {
         //     console.log('getMedicionesByid_dispositivo');
         //     console.log(med);
         // });
-
-        //6
-        //opción 1- utilizar libreria Momentjs , haciendo npm install --save moment y luego el import * as moment from 'moment'; en donde lo necesitemos.
-        // let a : Medicion= new Medicion(99,moment().format("YYYY-MM-DD hh:mm:ss"),99,1);
-
-        //opción 2, utilizar el objeto Date y hacer el formato necesario a mano.
-        // let current_datetime = new Date();
-        // let formatted_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds();
-        // let a: Medicion = new Medicion(99, formatted_date, 99, 1);
-
-        // this.mServ.agregarMedicion(a).then((med) => {
-        //     console.log('agregarMedicion');
-
-        //     console.log(med);
-        // });
     }
 
+    // INICIALIZACION
     async ionViewWillEnter() {
-        console.log('ion view willl enter')
 
         let id_dispositivo = this.router.snapshot.paramMap.get('id');
-        this.dispositivo = await this.dServ.getDispositivo(id_dispositivo);
-        this.medicion = await this.mServ.getMedicionByIdDispositivo(id_dispositivo);
-        this.logRiegos.apertura = 0;    // arranca con la electrovalvula cerrada
+        this.dispositivo = await this.dispositivoService.getDispositivo(id_dispositivo);
+        this.medicion = await this.medicionService.getMedicionByIdDispositivo(this.dispositivo.dispositivoId);
         this.logRiegos.electrovalvulaId = this.dispositivo.electrovalvulaId;
-        this.accion_electrovalvula = this.ABRIR_ELECTROVALVULA;
+        this.medicion.dispositivoId = this.dispositivo.dispositivoId;
+        this.logRiegos.apertura = this.ELECTROVALVULA_CERRADA;    // arranca con la electrovalvula cerrada
+        this.accion_electrovalvula = this.ABRIR_ELECTROVALVULA;   // asigno ABRIR al boton de accionamiento de electrovalvula
         this.generarChart(id_dispositivo, this.medicion.valor);
         this.actualizarGrafica(Number(this.medicion.valor));
-    }
-    ionViewDidEnter() {
-        console.log('ionViewDidEnter')
-        // this.generarChart();
     }
 
     actualizarGrafica(valor_medicion: number) {
@@ -160,20 +145,21 @@ export class DispositivoPage implements OnInit {
         this.myChart = Highcharts.chart('highcharts', this.chartOptions);
     }
 
-    clickElectrovalvula() { // cada vez que se presione guardo en la tabla log 
-        console.log("click elec");
-        let current_datetime = new Date();
-        // let formatted_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds();
+    clickElectrovalvula() {
+        let current_datetime = moment().format("YYYY-MM-DD hh:mm:ss");
 
+        if (this.accion_electrovalvula === this.ABRIR_ELECTROVALVULA) {
 
-        if (this.accion_electrovalvula === this.ABRIR_ELECTROVALVULA) {   // genero mediciones random y muestro en grafico cuando es menor a 30 corta solo(no necesario)
             this.logRiegos.fecha = current_datetime;
-            this.logRiegos.apertura = 1;
-            console.log('agregar log riego ' + this.logRiegos);
+            this.logRiegos.apertura = this.ELECTROVALVULA_ABIERTA;
+
+            this.medicionService.agregarLogRiego(this.logRiegos);
 
             this.accion_electrovalvula = this.CERRAR_ELECTROVALVULA;
-            this.actualizarGrafica(10);
-                /*
+            this.medicion.valor = Math.floor(Math.random() * 100);
+            this.actualizarGrafica(this.medicion.valor);
+
+            /*
             let valor = this.medicion.valor;
             var intervalObj = setInterval(() => {
                 // valor = Math.random();
@@ -184,25 +170,19 @@ export class DispositivoPage implements OnInit {
                     clearInterval(intervalObj);
                     this.logRiegos.apertura = 0;
                     this.accion_electrovalvula = this.ABRIR_ELECTROVALVULA;
-                    console.log('EV cerrada ' + valor);
-
-                    // this.dispositivoServ.postElectrovalvula(0, this.dispositivo.electrovalvulaId);
-                    // this.medicionServ.postMedicion(valor, this.dispositivo.dispositivoId);
                 }
-            }, 1000);*/
+            }, 1000);
+            */
 
         } else {                                    // tomo ultimo valor y lo inserto en la tabla mediciones
             this.logRiegos.fecha = current_datetime;
-            this.logRiegos.apertura = 0;
-            console.log('agregar log riego ' + this.logRiegos);
+            this.logRiegos.apertura = this.ELECTROVALVULA_CERRADA;
+            this.medicion.fecha = current_datetime;
+
             this.accion_electrovalvula = this.ABRIR_ELECTROVALVULA;
-
-            // let a: Medicion = new Medicion(99, formatted_date, 99, 1);
-            console.log('agregarMedicion' + current_datetime);
-            // clearInterval(intervalObj);
-
+            this.medicionService.agregarLogRiego(this.logRiegos);
+            this.medicionService.agregarMedicion(this.medicion);
         }
-        console.log('salgo click eletrovalvula');
     }
 
 }

@@ -1,6 +1,6 @@
 export class Medicion {
     private _medicionId: number;
-    private _fecha: Date;
+    private _fecha: string;
     private _valor: number;
     private _dispositivoId: number;
 
@@ -18,10 +18,10 @@ export class Medicion {
         this._medicionId = value;
     }
 
-    public get fecha(): Date {
+    public get fecha(): string {
         return this._fecha;
     }
-    public set fecha(value: Date) {
+    public set fecha(value: string) {
         this._fecha = value;
     }
 
