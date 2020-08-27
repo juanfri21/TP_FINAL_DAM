@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
 import { Medicion } from '../model/Medicion';
-import { MedicionService } from '../services/medicion.service';
 import { Dispositivo } from '../model/Dispositivo';
+import { LogRiegos } from '../model/LogRiegos';
+
+import { MedicionService } from '../services/medicion.service';
 import { DispositivoService } from '../services/dispositivo.service';
 
 //TODO: agregar componente log de riegos
@@ -20,18 +23,22 @@ require('highcharts/modules/solid-gauge')(Highcharts);
 
 export class DispositivoPage implements OnInit {
 
-    private valorObtenido: number = 0;
+    public medicion: Medicion;
+    public dispositivo: Dispositivo;
+    public logRiegos = new LogRiegos(0, 0, '', 0);
+    public id_dispositivo: string;
+    public accion_electrovalvula: string;
+    public ABRIR_ELECTROVALVULA: string = 'Abrir';
+    public CERRAR_ELECTROVALVULA: string = 'Cerrar';
+    // public valor_medicion: number = 100;
     public myChart;
     private chartOptions;
 
-    public medicion: Medicion;
-    public dispositivo: Dispositivo;
-    public id_dispositivo: string;
     constructor(private router: ActivatedRoute, private dServ: DispositivoService, private mServ: MedicionService) { }
 
     ngOnInit() {
         console.log('ngOnInit dispositivo page');
-       
+
         // this.mServ.getMedicionesByid_dispositivo(this.id_dispositivo).then((med) => {
         //     console.log('getMedicionesByid_dispositivo');
         //     console.log(med);
@@ -57,12 +64,12 @@ export class DispositivoPage implements OnInit {
         console.log('ion view willl enter')
 
         let id_dispositivo = this.router.snapshot.paramMap.get('id');
-        console.log(id_dispositivo)
         this.dispositivo = await this.dServ.getDispositivo(id_dispositivo);
-        console.log(this.dispositivo);
         this.medicion = await this.mServ.getMedicionByIdDispositivo(id_dispositivo);
-        console.log(this.medicion)
-        this.generarChart(id_dispositivo);
+        this.logRiegos.apertura = 0;    // arranca con la electrovalvula cerrada
+        this.logRiegos.electrovalvulaId = this.dispositivo.electrovalvulaId;
+        this.accion_electrovalvula = this.ABRIR_ELECTROVALVULA;
+        this.generarChart(id_dispositivo, this.medicion.valor);
         this.actualizarGrafica(Number(this.medicion.valor));
     }
     ionViewDidEnter() {
@@ -71,7 +78,6 @@ export class DispositivoPage implements OnInit {
     }
 
     actualizarGrafica(valor_medicion: number) {
-        console.log(valor_medicion)
         this.myChart.update({
             series: [{
                 name: 'kPA',
@@ -83,7 +89,7 @@ export class DispositivoPage implements OnInit {
         });
     }
 
-    generarChart(id_dispositivo: String) {
+    generarChart(id_dispositivo: String, valor_medicion: number) {
         this.chartOptions = {
             chart: {
                 type: 'gauge',
@@ -144,7 +150,7 @@ export class DispositivoPage implements OnInit {
 
             series: [{
                 name: 'kPA',
-                data: [this.valorObtenido],
+                data: [valor_medicion],
                 tooltip: {
                     valueSuffix: ' kPA'
                 }
@@ -152,6 +158,51 @@ export class DispositivoPage implements OnInit {
 
         };
         this.myChart = Highcharts.chart('highcharts', this.chartOptions);
+    }
+
+    clickElectrovalvula() { // cada vez que se presione guardo en la tabla log 
+        console.log("click elec");
+        let current_datetime = new Date();
+        // let formatted_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds();
+
+
+        if (this.accion_electrovalvula === this.ABRIR_ELECTROVALVULA) {   // genero mediciones random y muestro en grafico cuando es menor a 30 corta solo(no necesario)
+            this.logRiegos.fecha = current_datetime;
+            this.logRiegos.apertura = 1;
+            console.log('agregar log riego ' + this.logRiegos);
+
+            this.accion_electrovalvula = this.CERRAR_ELECTROVALVULA;
+            this.actualizarGrafica(10);
+                /*
+            let valor = this.medicion.valor;
+            var intervalObj = setInterval(() => {
+                // valor = Math.random();
+                valor--;
+                console.log(valor);
+                this.actualizarGrafica(valor);
+                if (valor <= 5) {
+                    clearInterval(intervalObj);
+                    this.logRiegos.apertura = 0;
+                    this.accion_electrovalvula = this.ABRIR_ELECTROVALVULA;
+                    console.log('EV cerrada ' + valor);
+
+                    // this.dispositivoServ.postElectrovalvula(0, this.dispositivo.electrovalvulaId);
+                    // this.medicionServ.postMedicion(valor, this.dispositivo.dispositivoId);
+                }
+            }, 1000);*/
+
+        } else {                                    // tomo ultimo valor y lo inserto en la tabla mediciones
+            this.logRiegos.fecha = current_datetime;
+            this.logRiegos.apertura = 0;
+            console.log('agregar log riego ' + this.logRiegos);
+            this.accion_electrovalvula = this.ABRIR_ELECTROVALVULA;
+
+            // let a: Medicion = new Medicion(99, formatted_date, 99, 1);
+            console.log('agregarMedicion' + current_datetime);
+            // clearInterval(intervalObj);
+
+        }
+        console.log('salgo click eletrovalvula');
     }
 
 }
