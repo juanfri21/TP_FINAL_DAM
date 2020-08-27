@@ -1,0 +1,38 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-button routerLink="/dispositivo/{{id_electruvalvula}}" routerDirection="back">
+				<ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+			</ion-button>
+		</ion-buttons>
+		<ion-title>Log Riegos </ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<ion-row>
+		<ion-col sizeXl="6" text-center>
+			<ion-card>
+				<ion-card-content>
+					<ion-row>
+						<ion-col col-4>
+							<ion-item> Fecha </ion-item>
+						</ion-col>
+						<ion-col col-4>
+							<ion-item> Valor </ion-item>
+						</ion-col>
+					</ion-row>
+
+					<ion-row *ngFor="let riego of logRiegos">
+						<ion-col col-4>
+							<ion-item> {{riego.fecha}} </ion-item>
+						</ion-col>
+						<ion-col col-4>
+							<ion-item> {{riego.apertura}} </ion-item>
+						</ion-col>
+					</ion-row>
+				</ion-card-content>
+			</ion-card>
+		</ion-col>
+	</ion-row>
+</ion-content>

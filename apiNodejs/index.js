@@ -5,6 +5,8 @@ var PORT = 3000;
 var routerDisp = require('./routes/dispositivo');
 //ruteo dispositivo
 var routerMedicion = require('./routes/medicion');
+//ruteo logueo de riegos
+var routerLogRiegos = require('./routes/logRiegos');
 app.use(express.json());
 var cors = require('cors');
 
@@ -14,6 +16,8 @@ app.use(cors(corsConfig));
 app.use('/api/dispositivo', routerDisp);
 
 app.use('/api/medicion', routerMedicion);
+
+app.use('/api/logRiegos', routerLogRiegos);
 
 app.listen(PORT, function (req, res) {
 	console.log('API Funcionando ');
