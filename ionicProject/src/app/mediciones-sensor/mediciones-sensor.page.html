@@ -1,0 +1,38 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-button routerLink="/dispositivo/{{id_dispositivo}}" routerDirection="back">
+				<ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+			</ion-button>
+		</ion-buttons>
+		<ion-title>Mediciones - Sensor N° {{id_dispositivo}}</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<ion-row>
+		<ion-col sizeXl="6" text-center>
+			<ion-card>
+				<ion-card-content>
+					<ion-row>
+						<ion-col col-4>
+							<ion-item> Fecha </ion-item>
+						</ion-col>
+						<ion-col col-4>
+							<ion-item> Valor </ion-item>
+						</ion-col>
+					</ion-row>
+
+					<ion-row *ngFor="let medicion of mediciones">
+						<ion-col col-4>
+							<ion-item> {{medicion.fecha | formatoFecha}} </ion-item>
+						</ion-col>
+						<ion-col col-4>
+							<ion-item> {{medicion.valor}} </ion-item>
+						</ion-col>
+					</ion-row>
+				</ion-card-content>
+			</ion-card>
+		</ion-col>
+	</ion-row>
+</ion-content>
