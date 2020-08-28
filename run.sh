@@ -2,6 +2,8 @@
 
 echo "Cerrando posibles contenedores abiertos"
 docker stop $(docker ps -a -q)
+echo "Eliminando red"
+docker network rm mysql-net
 echo "Creando red"
 docker network create --driver bridge mysql-net
 cd apiNodejs
