@@ -1,11 +1,11 @@
 <ion-header>
 	<ion-toolbar>
 		<ion-buttons slot="start">
-			<ion-button routerLink="/dispositivo/{{id_electruvalvula}}" routerDirection="back">
+			<ion-button routerLink="/dispositivo/{{id_dispositivo}}" routerDirection="back">
 				<ion-icon slot="icon-only" name="arrow-back"></ion-icon>
 			</ion-button>
 		</ion-buttons>
-		<ion-title>Log Electroválvula </ion-title>
+		<ion-title>Mediciones - Sensor N° {{id_dispositivo}}</ion-title>
 	</ion-toolbar>
 </ion-header>
 
@@ -14,21 +14,21 @@
 		<ion-col sizeXl="6" text-center>
 			<ion-card>
 				<ion-card-content>
-					<ion-row >
-						<ion-col col-4 >
+					<ion-row>
+						<ion-col col-4>
 							<ion-item> Fecha </ion-item>
 						</ion-col>
 						<ion-col col-4>
-							<ion-item> Estado electrovalvula </ion-item>
+							<ion-item> Valor </ion-item>
 						</ion-col>
 					</ion-row>
 
-					<ion-row *ngFor="let riego of logRiegos">
+					<ion-row *ngFor="let medicion of mediciones">
 						<ion-col col-4>
-							<ion-item> {{riego.fecha  | formatoFecha}} </ion-item>
+							<ion-item> {{medicion.fecha | formatoFecha}} </ion-item>
 						</ion-col>
 						<ion-col col-4>
-							<ion-item> {{riego.apertura}} </ion-item>
+							<ion-item> {{medicion.valor}} </ion-item>
 						</ion-col>
 					</ion-row>
 				</ion-card-content>

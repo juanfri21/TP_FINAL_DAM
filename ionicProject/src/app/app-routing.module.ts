@@ -19,6 +19,10 @@ const routes: Routes = [
     path: 'log-riegos/:id',
     loadChildren: () => import('./log-riegos/log-riegos.module').then( m => m.LogRiegosPageModule)
   },
+  {
+    path: 'mediciones-sensor/:id',
+    loadChildren: () => import('./mediciones-sensor/mediciones-sensor.module').then( m => m.MedicionesSensorPageModule)
+  },
 ];
 
 @NgModule({

@@ -5,7 +5,7 @@
 				<ion-icon slot="icon-only" name="arrow-back"></ion-icon>
 			</ion-button>
 		</ion-buttons>
-		<ion-title>Sensor-{{this.id_dispositivo}}</ion-title>
+		<ion-title>Sensor N° {{this.id_dispositivo}}</ion-title>
 	</ion-toolbar>
 </ion-header>
 
@@ -15,14 +15,17 @@
 			<div id="highcharts" style="width: 100%; height: 300px;"></div>
 		</ion-card-header>
 		<ion-card-content>
-			<ion-button expand="block"  (click)="clickElectrovalvula()">
+			<ion-button *ngIf="medicion.valor > 30 && accion_electrovalvula==ABRIR_ELECTROVALVULA" appColorFondo expand="block" (click)="clickElectrovalvula()">
+				{{accion_electrovalvula}} Electroválvula </ion-button
+			>
+			<ion-button *ngIf="medicion.valor <= 30 || accion_electrovalvula==CERRAR_ELECTROVALVULA"  expand="block"  (click)="clickElectrovalvula()">
 				{{accion_electrovalvula}} Electroválvula</ion-button
 			>
-			<ion-button routerLink="/log-sensor/{{this.id_dispositivo}}" expand="block" fill="outline"
-				>Ver Log Sensor</ion-button
+			<ion-button routerLink="/mediciones-sensor/{{this.id_dispositivo}}" expand="block" fill="outline"
+				>Ver Log Mediciones</ion-button
 			>
-			<ion-button routerLink="/log-riegos/{{this.logRiegos.electrovalvulaId}}" expand="block" fill="outline"
-				>Ver log riegos</ion-button
+			<ion-button ColorFondoDirective routerLink="/log-riegos/{{this.logRiegos.electrovalvulaId}}" expand="block" fill="outline"
+				>Ver log Electroválvula</ion-button
 			>
 		</ion-card-content>
 	</ion-card>

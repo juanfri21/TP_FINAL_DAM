@@ -14,7 +14,6 @@ export class HomePage {
   constructor(public dispositivoServ: DispositivoService) {
     dispositivoServ.getListadoDispositivos().then(lst => {
       this.listadoDispositivo = lst;
-      console.log(this.listadoDispositivo);
     })
   }
 

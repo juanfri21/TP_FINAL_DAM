@@ -24,6 +24,8 @@ export class MedicionService {
     getMedicionesByIdDispositivo(id): Promise<Medicion[]> {
         console.log('getMedicionesByIdDispositivo')
         return this._http.get(this.urlApi + "/api/medicion/" + id + "/todas").toPromise().then((mediciones: Medicion[]) => {
+            console.log(mediciones)
+
             return mediciones;
         });
     };
@@ -39,7 +41,7 @@ export class MedicionService {
     agregarLogRiego(logRiego: LogRiegos) {
         console.log('agregar log riego');
         console.log(logRiego);
-        return this._http.post(this.urlApi + "/api/logRiegos/agregar", { fecha:logRiego.fecha,apertura:logRiego.apertura,electrovalvulaId:logRiego.electrovalvulaId }).toPromise().then((result) => {
+        return this._http.post(this.urlApi + "/api/logRiegos/agregar", { fecha: logRiego.fecha, apertura: logRiego.apertura, electrovalvulaId: logRiego.electrovalvulaId }).toPromise().then((result) => {
             console.log(result)
             return result;
         });
@@ -49,7 +51,6 @@ export class MedicionService {
         console.log('getMedicionesByIdDispositivo')
         console.log('EV id: ' + id_electrovalvula)
         return this._http.get(this.urlApi + "/api/logRiegos/" + id_electrovalvula + "/todas").toPromise().then((logRiegos: LogRiegos[]) => {
-            console.log(logRiegos)
             return logRiegos;
         });
     };

@@ -8,7 +8,6 @@ import { LogRiegos } from '../model/LogRiegos';
 import { MedicionService } from '../services/medicion.service';
 import { DispositivoService } from '../services/dispositivo.service';
 
-//TODO: agregar componente log de riegos
 
 import * as Highcharts from 'highcharts';
 import * as moment from 'moment';
@@ -25,8 +24,8 @@ require('highcharts/modules/solid-gauge')(Highcharts);
 
 export class DispositivoPage implements OnInit {
 
-    public medicion: Medicion;
-    public dispositivo: Dispositivo;
+    public medicion = new Medicion(0, ' ', 0, 0);
+    public dispositivo = new Dispositivo(0, " ", " ", 0);
     public logRiegos = new LogRiegos(0, 0, '', 0);
     public id_dispositivo: string;
     public accion_electrovalvula: string;
@@ -34,31 +33,23 @@ export class DispositivoPage implements OnInit {
     public CERRAR_ELECTROVALVULA: string = 'Cerrar';
     public ELECTROVALVULA_ABIERTA: number = 1;
     public ELECTROVALVULA_CERRADA: number = 0;
-    // public valor_medicion: number = 100;
     public myChart;
     private chartOptions;
 
     constructor(private router: ActivatedRoute, private dispositivoService: DispositivoService, private medicionService: MedicionService) { }
 
-    ngOnInit() {
-
-        // this.medicionService.getMedicionesByid_dispositivo(this.id_dispositivo).then((med) => {
-        //     console.log('getMedicionesByid_dispositivo');
-        //     console.log(med);
-        // });
-    }
+    ngOnInit() { }
 
     // INICIALIZACION
     async ionViewWillEnter() {
-
-        let id_dispositivo = this.router.snapshot.paramMap.get('id');
-        this.dispositivo = await this.dispositivoService.getDispositivo(id_dispositivo);
-        this.medicion = await this.medicionService.getMedicionByIdDispositivo(this.dispositivo.dispositivoId);
+        this.id_dispositivo = this.router.snapshot.paramMap.get('id');
+        this.dispositivo = await this.dispositivoService.getDispositivo(this.id_dispositivo);
         this.logRiegos.electrovalvulaId = this.dispositivo.electrovalvulaId;
         this.medicion.dispositivoId = this.dispositivo.dispositivoId;
         this.logRiegos.apertura = this.ELECTROVALVULA_CERRADA;    // arranca con la electrovalvula cerrada
         this.accion_electrovalvula = this.ABRIR_ELECTROVALVULA;   // asigno ABRIR al boton de accionamiento de electrovalvula
-        this.generarChart(id_dispositivo, this.medicion.valor);
+        this.medicion = await this.medicionService.getMedicionByIdDispositivo(this.dispositivo.dispositivoId);
+        this.generarChart(this.id_dispositivo, Number(this.medicion.valor));
         this.actualizarGrafica(Number(this.medicion.valor));
     }
 
@@ -146,34 +137,28 @@ export class DispositivoPage implements OnInit {
     }
 
     clickElectrovalvula() {
-        let current_datetime = moment().format("YYYY-MM-DD hh:mm:ss");
+        let current_datetime = moment().format("YYYY-MM-DD HH:mm:ss");
 
         if (this.accion_electrovalvula === this.ABRIR_ELECTROVALVULA) {
 
             this.logRiegos.fecha = current_datetime;
             this.logRiegos.apertura = this.ELECTROVALVULA_ABIERTA;
-
             this.medicionService.agregarLogRiego(this.logRiegos);
 
             this.accion_electrovalvula = this.CERRAR_ELECTROVALVULA;
             this.medicion.valor = Math.floor(Math.random() * 100);
-            this.actualizarGrafica(this.medicion.valor);
+            this.actualizarGrafica(Number(this.medicion.valor));
 
-            /*
-            let valor = this.medicion.valor;
             var intervalObj = setInterval(() => {
-                // valor = Math.random();
-                valor--;
-                console.log(valor);
-                this.actualizarGrafica(valor);
-                if (valor <= 5) {
+
+                if (this.medicion.valor == 0 || this.logRiegos.apertura == this.ELECTROVALVULA_CERRADA) {
                     clearInterval(intervalObj);
-                    this.logRiegos.apertura = 0;
-                    this.accion_electrovalvula = this.ABRIR_ELECTROVALVULA;
+                    intervalObj = null;
+                } else {
+                    this.medicion.valor--;
+                    this.actualizarGrafica(this.medicion.valor);
                 }
             }, 1000);
-            */
-
         } else {                                    // tomo ultimo valor y lo inserto en la tabla mediciones
             this.logRiegos.fecha = current_datetime;
             this.logRiegos.apertura = this.ELECTROVALVULA_CERRADA;

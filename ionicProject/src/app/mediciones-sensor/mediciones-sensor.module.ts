@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { LogRiegosPageRoutingModule } from './log-riegos-routing.module';
+import { MedicionesSensorPageRoutingModule } from './mediciones-sensor-routing.module';
 
-import { LogRiegosPage } from './log-riegos.page';
+import { MedicionesSensorPage } from './mediciones-sensor.page';
 import { FormatoFechaPipe } from '../Pipe/formato-fecha.pipe';
 
 @NgModule({
@@ -14,8 +14,8 @@ import { FormatoFechaPipe } from '../Pipe/formato-fecha.pipe';
     CommonModule,
     FormsModule,
     IonicModule,
-    LogRiegosPageRoutingModule
+    MedicionesSensorPageRoutingModule
   ],
-  declarations: [LogRiegosPage, FormatoFechaPipe]
+  declarations: [MedicionesSensorPage, FormatoFechaPipe]
 })
-export class LogRiegosPageModule {}
+export class MedicionesSensorPageModule { }
