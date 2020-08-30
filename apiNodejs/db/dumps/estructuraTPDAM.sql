@@ -89,10 +89,6 @@ CREATE TABLE IF NOT EXISTS `DAM`.`Log_Riegos` (
 ENGINE = InnoDB;
 
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
 INSERT INTO DAM.Electrovalvulas (nombre) VALUES ('eLPatio');
 INSERT INTO DAM.Electrovalvulas (nombre) VALUES ('eLCocina');
 INSERT INTO DAM.Electrovalvulas (nombre) VALUES ('eLJardinDelantero');
@@ -120,3 +116,8 @@ INSERT INTO DAM.Mediciones (fecha,valor,dispositivoId) VALUES (current_timestamp
 INSERT INTO DAM.Mediciones (fecha,valor,dispositivoId) VALUES (current_timestamp(),44,4 );
 INSERT INTO DAM.Mediciones (fecha,valor,dispositivoId) VALUES (current_timestamp(),61,5 );
 INSERT INTO DAM.Mediciones (fecha,valor,dispositivoId) VALUES (current_timestamp(),12,2 );
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
