@@ -17,10 +17,14 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 CREATE SCHEMA IF NOT EXISTS `DAM` DEFAULT CHARACTER SET utf8 ;
 USE `DAM` ;
 
+DROP TABLE IF EXISTS `DAM`.`Electrovalvulas` ;
+DROP TABLE IF EXISTS `DAM`.`Dispositivos` ;
+DROP TABLE IF EXISTS `DAM`.`Mediciones` ;
+DROP TABLE IF EXISTS `DAM`.`Log_Riegos` ;
+
 -- -----------------------------------------------------
 -- Table `DAM`.`Electrovalvulas`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `DAM`.`Electrovalvulas` ;
 
 CREATE TABLE IF NOT EXISTS `DAM`.`Electrovalvulas` (
   `electrovalvulaId` INT NOT NULL AUTO_INCREMENT,
@@ -32,7 +36,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `DAM`.`Dispositivos`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `DAM`.`Dispositivos` ;
 
 CREATE TABLE IF NOT EXISTS `DAM`.`Dispositivos` (
   `dispositivoId` INT NOT NULL AUTO_INCREMENT,
@@ -52,7 +55,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `DAM`.`Mediciones`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `DAM`.`Mediciones` ;
 
 CREATE TABLE IF NOT EXISTS `DAM`.`Mediciones` (
   `medicionId` INT NOT NULL AUTO_INCREMENT,
@@ -72,7 +74,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `DAM`.`Log_Riegos`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `DAM`.`Log_Riegos` ;
 
 CREATE TABLE IF NOT EXISTS `DAM`.`Log_Riegos` (
   `logRiegoId` INT NOT NULL AUTO_INCREMENT,
@@ -117,6 +118,13 @@ INSERT INTO DAM.Mediciones (fecha,valor,dispositivoId) VALUES (current_timestamp
 INSERT INTO DAM.Mediciones (fecha,valor,dispositivoId) VALUES (current_timestamp(),61,5 );
 INSERT INTO DAM.Mediciones (fecha,valor,dispositivoId) VALUES (current_timestamp(),12,2 );
 
+
+INSERT INTO DAM.Log_Riegos (apertura,fecha,electrovalvulaId) VALUES (0,current_timestamp(),1 );
+INSERT INTO DAM.Log_Riegos (apertura,fecha,electrovalvulaId) VALUES (0,current_timestamp(),2 );
+INSERT INTO DAM.Log_Riegos (apertura,fecha,electrovalvulaId) VALUES (0,current_timestamp(),3 );
+INSERT INTO DAM.Log_Riegos (apertura,fecha,electrovalvulaId) VALUES (0,current_timestamp(),4 );
+INSERT INTO DAM.Log_Riegos (apertura,fecha,electrovalvulaId) VALUES (0,current_timestamp(),5 );
+INSERT INTO DAM.Log_Riegos (apertura,fecha,electrovalvulaId) VALUES (0,current_timestamp(),6 );
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
